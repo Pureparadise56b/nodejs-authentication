@@ -9,9 +9,6 @@ services:
     volumes:
       - mongo-data:/data/db
       - mongo-config:/data/configdb
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: password
 
 volumes:
   mongo-data:

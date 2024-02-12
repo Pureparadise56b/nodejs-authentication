@@ -22,7 +22,6 @@ const userSchema = new mongoose.Schema(
     },
     salt: {
       type: String,
-      required: true,
     },
     refreshToken: {
       type: String,
@@ -44,22 +43,16 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 )
 
-export const User = mongoose.model('User', userSchema)
-
 userSchema.pre('save', async function (next) {
-  try {
-    if (!this.isModified('password')) next()
+  if (!this.isModified('password')) return next()
 
-    const saltString = await bcrypt.genSalt(10)
+  const saltString = await bcrypt.genSalt(10)
 
-    const hashedPassword = await bcrypt.hash(this.password, saltString)
+  const hashedPassword = await bcrypt.hash(this.password, saltString)
 
-    this.password = hashedPassword
-    this.salt = saltString
-    next()
-  } catch (error) {
-    next(error)
-  }
+  this.password = hashedPassword
+  this.salt = saltString
+  next()
 })
 
 userSchema.methods.matchPassword = async function (password) {
@@ -94,3 +87,5 @@ userSchema.methods.generateRefreshToken = function () {
     }
   )
 }
+
+export const User = mongoose.model('User', userSchema)

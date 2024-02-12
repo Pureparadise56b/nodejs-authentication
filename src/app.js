@@ -2,6 +2,7 @@ import express from 'express'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import { DATA_LIMIT } from './constants.js'
+import userRouter from './routes/user.route.js'
 
 const app = express()
 
@@ -15,5 +16,6 @@ app.use(
 )
 
 // ROUTES
+app.use('/api/v1/user', userRouter)
 
 export { app }
