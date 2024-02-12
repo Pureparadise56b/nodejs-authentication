@@ -1,0 +1,11 @@
+*.env
+*.env.*
+
+/.vscode
+/node_modules
+
+*.yml
+
+package.json
+package*.json
+yarn*.lock
