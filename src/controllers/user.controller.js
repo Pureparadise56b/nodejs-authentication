@@ -70,7 +70,7 @@ const handleUserLogin = asyncHandler(async (req, res) => {
     throw new ApiError(400, 'Incorrect Password')
   }
 
-  const { accessToken, refreshToken } = await generateTokens(existingUser._id)
+  const { accessToken, refreshToken } = await generateTokens(existingUser?._id)
 
   res
     .status(200)
@@ -85,4 +85,18 @@ const handleUserLogin = asyncHandler(async (req, res) => {
     )
 })
 
-export { handleUserSignUp, handleUserLogin }
+const handleUserLogout = asyncHandler(async (req, res) => {
+  await User.findByIdAndUpdate(req.user?.id, {
+    $set: {
+      refreshToken: '',
+    },
+  })
+
+  res
+    .status(200)
+    .clearCookie('access_token')
+    .clearCookie('refresh_token')
+    .json(new ApiResponse(200, {}, 'Logout successfully'))
+})
+
+export { handleUserSignUp, handleUserLogin, handleUserLogout }
