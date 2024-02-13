@@ -99,4 +99,22 @@ const handleUserLogout = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, {}, 'Logout successfully'))
 })
 
-export { handleUserSignUp, handleUserLogin, handleUserLogout }
+const getCurrentUser = asyncHandler(async (req, res) => {
+  const { userId } = req.query
+
+  if (!userId) {
+    throw new ApiError(400, 'User Id is required')
+  }
+
+  const user = await User.findById(userId).select(
+    '-password -salt -refreshToken'
+  )
+
+  if (!user) {
+    throw new ApiError(400, 'User does not exist')
+  }
+
+  res.status(200).json(new ApiResponse(200, user, 'User fetched successfully'))
+})
+
+export { handleUserSignUp, handleUserLogin, handleUserLogout, getCurrentUser }
