@@ -10,6 +10,7 @@ const connectDb = async () => {
     console.log('Connected Host: ', response.connection.host)
   } catch (error) {
     console.error('Mongo Connection Error: ', error.message)
+    process.exit(1)
   }
 }
 

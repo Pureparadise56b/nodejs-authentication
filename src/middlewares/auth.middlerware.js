@@ -5,7 +5,9 @@ import JWT from 'jsonwebtoken'
 
 const JwtVerify = asyncHandler(async (req, _, next) => {
   try {
-    const accessToken = req.cookies.access_token
+    let accessToken = null
+    accessToken =
+      req.cookies.access_token || req.headers.authorization['access_token']
 
     if (!accessToken) {
       throw new ApiError(400, 'Unauthorised access: Login first')
